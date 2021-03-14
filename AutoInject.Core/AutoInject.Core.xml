@@ -1,0 +1,184 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AutoInject.Core</name>
+    </assembly>
+    <members>
+        <member name="T:AutoInject.Core.IModule">
+            <summary>
+            Defines the module
+            </summary>
+        </member>
+        <member name="M:AutoInject.Core.IModule.RegisterAssemblyNames(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Registers name spaces
+            </summary>
+            <param name="assemblyNames">The assembly names.</param>
+        </member>
+        <member name="M:AutoInject.Core.IModule.Initialize(AutoInject.Core.IModuleRegister,System.Reflection.TypeInfo)">
+            <summary>
+            Initialize to get interface, implementation to register.
+            </summary>
+            <param name="moduleRegister">The module register.</param>
+            <param name="type">The type.</param>
+        </member>
+        <member name="M:AutoInject.Core.IModule.Initialize(AutoInject.Core.IModuleRegister,System.Reflection.TypeInfo,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Initialize to get interface, implementation to register.
+            </summary>
+            <param name="moduleRegister">The module register.</param>
+            <param name="type">The type.</param>
+            <param name="lifetime"></param>
+        </member>
+        <member name="T:AutoInject.Core.IModuleRegister">
+            <summary>
+            Defines the module register
+            </summary>
+        </member>
+        <member name="M:AutoInject.Core.IModuleRegister.Add(System.Type,System.Type,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds service type into container. 
+            </summary>
+            <param name="defineType">The define type.</param>
+            <param name="implementationType">The implementation type.</param>
+            <param name="serviceLifetime">The service lifetime.</param>
+        </member>
+        <member name="T:AutoInject.Core.InjectExportAttribute">
+            <summary>
+            The inject export attribute
+            </summary>
+        </member>
+        <member name="P:AutoInject.Core.InjectExportAttribute.ServiceLifetime">
+            <summary>
+            The service lifetime
+            </summary>
+        </member>
+        <member name="M:AutoInject.Core.InjectExportAttribute.#ctor(System.Type,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+             Initializes a new instance of the <see cref="T:AutoInject.Core.InjectExportAttribute"/> class.
+            </summary>
+            <param name="contractType">The contact type.</param>
+            <param name="serviceLifetime">The service lifetime.</param>
+        </member>
+        <member name="M:AutoInject.Core.InjectExportAttribute.#ctor(System.String,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+             Initializes a new instance of the <see cref="T:AutoInject.Core.InjectExportAttribute"/> class.
+            </summary>
+            <param name="contractName">The contact name.</param>
+            <param name="serviceLifetime">The service lifetime.</param>
+        </member>
+        <member name="M:AutoInject.Core.InjectExportAttribute.#ctor(System.String,System.Type,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AutoInject.Core.InjectExportAttribute"/> class.
+            </summary>
+            <param name="contractName">The contact name.</param>
+            <param name="contractType">The contact type.</param>
+            <param name="serviceLifetime">The service lifetime.</param>
+        </member>
+        <member name="T:AutoInject.Core.ModuleInitializer">
+            <summary>
+            The model initializer 
+            </summary>
+        </member>
+        <member name="F:AutoInject.Core.ModuleInitializer.regAssemblyNames">
+            <summary>
+            The register assembly names.
+            </summary>
+        </member>
+        <member name="M:AutoInject.Core.ModuleInitializer.Initialize(AutoInject.Core.IModuleRegister,System.Reflection.TypeInfo)">
+            <summary>
+            Initialize to get interface, implementation to register.
+            </summary>
+            <param name="moduleRegister">The module register.</param>
+            <param name="type">The type.</param>
+        </member>
+        <member name="M:AutoInject.Core.ModuleInitializer.Initialize(AutoInject.Core.IModuleRegister,System.Reflection.TypeInfo,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Initialize to get interface, implementation to register.
+            </summary>
+            <param name="moduleRegister">The module register.</param>
+            <param name="type">The type.</param>
+            <param name="lifetime">The life time.</param>
+        </member>
+        <member name="M:AutoInject.Core.ModuleInitializer.RegisterAssemblyNames(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Registers name spaces
+            </summary>
+            <param name="assemblyNames">The assembly names.</param>
+        </member>
+        <member name="M:AutoInject.Core.ModuleInitializer.GetInjectExportAttribute(System.Reflection.TypeInfo)">
+            <summary>
+            Get inject export attribute.
+            </summary>
+            <param name="type">The type of input assembly.</param>
+            <returns>InjectExportAttribute</returns>
+        </member>
+        <member name="M:AutoInject.Core.ModuleInitializer.GetInjectExportInfo(System.Reflection.TypeInfo)">
+            <summary>
+            Gets inject export information include contact type name and service lifetime.
+            </summary>
+            <param name="type">The type of input assembly.</param>
+            <returns>(The contact type name, the service lifetime)</returns>
+        </member>
+        <member name="M:AutoInject.Core.ModuleInitializer.GetContactInfo(System.Reflection.TypeInfo)">
+            <summary>
+            Gets the contact type information include defined interface and service lifetime. 
+            </summary>
+            <param name="type">The type of input assembly.</param>
+            <returns>(The type of defined interface, the service lifetime)</returns>
+        </member>
+        <member name="T:AutoInject.Core.ModuleLoader">
+            <summary>
+            The module loader
+            </summary>
+        </member>
+        <member name="F:AutoInject.Core.ModuleLoader.SearchPattern">
+            <summary>
+            The search pattern.
+            </summary>
+        </member>
+        <member name="M:AutoInject.Core.ModuleLoader.LoadContainer(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Load all included DLL to container.
+            </summary>
+            <param name="services">The service collection.</param>
+            <param name="registeredAssemblyNames">The registered assembly names.</param>
+        </member>
+        <member name="M:AutoInject.Core.ModuleLoader.GetInjectedAssemblies(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets injected assemblies.
+            </summary>
+            <param name="registeredAssemblyNames">The registered assembly names.</param>
+            <returns></returns>
+        </member>
+        <member name="T:AutoInject.Core.ModuleRegister">
+            <summary>
+            The module register
+            </summary>
+        </member>
+        <member name="F:AutoInject.Core.ModuleRegister.IModule">
+            <summary>
+            The interface to skip register.
+            </summary>
+        </member>
+        <member name="F:AutoInject.Core.ModuleRegister._serviceCollection">
+            <summary>
+            The service collection.
+            </summary>
+        </member>
+        <member name="M:AutoInject.Core.ModuleRegister.#ctor(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+             Initializes a new instance of the <see cref="T:AutoInject.Core.ModuleRegister"/> class.
+            </summary>
+            <param name="serviceCollection"></param>
+        </member>
+        <member name="M:AutoInject.Core.ModuleRegister.Add(System.Type,System.Type,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds service type into container. 
+            </summary>
+            <param name="defineType">The define type.</param>
+            <param name="implementationType">The implementation type.</param>
+            <param name="lifetime">The service lifetime.</param>
+        </member>
+    </members>
+</doc>
