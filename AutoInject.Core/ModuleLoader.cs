@@ -22,6 +22,11 @@ namespace AutoInject.Core
         private const string SearchPattern = "*.dll";
 
         /// <summary>
+        /// 
+        /// </summary>
+        private const char SplitPattern = '.';
+
+        /// <summary>
         /// Load all included DLL to container.
         /// </summary>
         /// <param name="services">The service collection.</param>
@@ -46,7 +51,6 @@ namespace AutoInject.Core
                 using (var container = containerConfig.CreateContainer())
                 {
                     var module = container.GetExport<IModule>();
-                    module.RegisteredAssemblyNames(registeredTypes);
                     var register = new ModuleRegister(services);
                     foreach (var targetAssembly in targetAssemblies)
                     {
@@ -75,12 +79,11 @@ namespace AutoInject.Core
         {
             StackTrace st = new StackTrace(1, true);
             var declaringType = st.GetFrame(1).GetMethod().DeclaringType;
-            var name = declaringType.FullName.Split('.').FirstOrDefault();
+            var name = declaringType.FullName.Split(SplitPattern).FirstOrDefault();
             return new List<string> (externals)
             {
                 name
             };
-           
         }
     }
 }

@@ -11,11 +11,11 @@ namespace AutoInject.Core
     public interface IModuleRegister
     {
         /// <summary>
-        /// Adds service type into container. 
+        /// Registers the service and its interface into container. 
         /// </summary>
         /// <param name="defineType">The define type.</param>
         /// <param name="implementationType">The implementation type.</param>
-        /// <param name="serviceLifetime">The service lifetime.</param>
-        void Add(Type defineType, Type implementationType, ServiceLifetime serviceLifetime);
+        /// <param name="lifetime">The lifetime.</param>
+        void Register(Type defineType, Type implementationType, ServiceLifetime lifetime);
     }
 }

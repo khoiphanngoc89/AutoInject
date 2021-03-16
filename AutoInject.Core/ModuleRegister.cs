@@ -23,28 +23,27 @@ namespace AutoInject.Core
         /// <summary>
         ///  Initializes a new instance of the <see cref="ModuleRegister"/> class.
         /// </summary>
-        /// <param name="serviceCollection"></param>
+        /// <param name="serviceCollection">The service collection.</param>
         public ModuleRegister(IServiceCollection serviceCollection)
         {
             _serviceCollection = serviceCollection;
         }
 
         /// <summary>
-        /// Adds service type into container. 
+        /// Registers the service and its interface into container. 
         /// </summary>
         /// <param name="defineType">The define type.</param>
         /// <param name="implementationType">The implementation type.</param>
-        /// <param name="lifetime">The service lifetime.</param>
-        public void Add(Type defineType, Type implementationType, ServiceLifetime lifetime)
+        /// <param name="lifetime">The lifetime.</param>
+        public void Register(Type itype, Type type, ServiceLifetime lifetime)
         {
             // Check service type is not null.
-            if(Equals(defineType, null) || defineType.FullName.Contains(IModule))
+            if(Equals(itype, null) || itype.FullName.Contains(IModule))
             {
                 return;
             }
-
-            var descriptor = new ServiceDescriptor(defineType, implementationType, lifetime);
-            _serviceCollection.Add(descriptor);
+           
+            _serviceCollection.Add(new ServiceDescriptor(itype, type, lifetime));
         }
     }
 }

@@ -14,79 +14,26 @@ namespace AutoInject.Core
     public class ModuleInitializer : IModule
     {
         /// <summary>
-        /// The register assembly names.
-        /// </summary>
-        private IEnumerable<string> regAssemblyNames;
-
-        /// <summary>
         /// Initialize to get interface, implementation to register.
         /// </summary>
         /// <param name="moduleRegister">The module register.</param>
         /// <param name="type">The type.</param>
         public void Initialize(IModuleRegister moduleRegister, TypeInfo type)
         {
+            if(Equals(type, null))
+            {
+                return;
+            }    
+
             // Check assembly name include in register assembly names
-            var (itype, serviceLifetime) = this.GetContactInfo(type);
-            moduleRegister.Add(itype, type, serviceLifetime);
+            moduleRegister.Register(type.GetInterfaces().FirstOrDefault(), type, this.GetLifetime(type));
         }
 
-        /// <summary>
-        /// Initialize to get interface, implementation to register.
-        /// </summary>
-        /// <param name="moduleRegister">The module register.</param>
-        /// <param name="type">The type.</param>
-        /// <param name="lifetime">The life time.</param>
-        public void Initialize(IModuleRegister moduleRegister, TypeInfo type, ServiceLifetime lifetime)
+        private ServiceLifetime GetLifetime(TypeInfo type)
         {
-            moduleRegister.Add(type, type, lifetime);
-        }
-
-        /// <summary>
-        /// Registers name spaces
-        /// </summary>
-        /// <param name="assemblyNames">The assembly names.</param>
-        public void RegisteredAssemblyNames(IEnumerable<string> assemblyNames)
-        {
-            this.regAssemblyNames = assemblyNames;
-        }
-
-        /// <summary>
-        /// Get inject export attribute.
-        /// </summary>
-        /// <param name="type">The type of input assembly.</param>
-        /// <returns>InjectExportAttribute</returns>
-        private InjectExportAttribute GetInjectExportAttribute(TypeInfo type)
-        {
-            var customAttr = type.GetCustomAttribute(typeof(InjectExportAttribute));
-            return customAttr as InjectExportAttribute;
-        }
-
-        /// <summary>
-        /// Gets inject export information include contact type name and service lifetime.
-        /// </summary>
-        /// <param name="type">The type of input assembly.</param>
-        /// <returns>(The contact type name, the service lifetime)</returns>
-        private (string, ServiceLifetime) GetInjectExportInfo(TypeInfo type)
-        {
-            var injectExportAttr = this.GetInjectExportAttribute(type);
-            return Equals(injectExportAttr, null) ?
-                (string.Empty, ServiceLifetime.Scoped) :
-                (injectExportAttr.ContractType.Name, injectExportAttr.ServiceLifetime);
-        }
-
-        /// <summary>
-        /// Gets the contact type information include defined interface and service lifetime. 
-        /// </summary>
-        /// <param name="type">The type of input assembly.</param>
-        /// <returns>(The type of defined interface, the service lifetime)</returns>
-        private (Type, ServiceLifetime) GetContactInfo(TypeInfo type)
-        {
-            var (contactTypeName, serviceLifetime) = this.GetInjectExportInfo(type);
-            var interfaces = type.GetInterfaces();
-
-            return (string.IsNullOrWhiteSpace(contactTypeName) ?
-                interfaces.FirstOrDefault() :
-                interfaces.FirstOrDefault(n => string.Equals(n.Name, contactTypeName)), serviceLifetime);
+            var raw = type.GetCustomAttribute(typeof(InjectExportAttribute));
+            var attribute = (raw as InjectExportAttribute)?.ServiceLifetime;
+            return attribute ?? ServiceLifetime.Scoped;
         }
     }
 }
