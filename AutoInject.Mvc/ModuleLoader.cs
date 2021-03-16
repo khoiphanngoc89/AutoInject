@@ -69,7 +69,6 @@ namespace AutoInject.Mvc
             var registeredTypes = GetAssemblies();
             var assemblies = AppDomain.CurrentDomain.GetAssemblies()
                                       .SelectMany(n => n.DefinedTypes.Where(m => m.IsClass && registeredTypes.Any(o => m.FullName.Contains(o))));
-            //
             try
             {
                 using (var aggregateCatalog = new AggregateCatalog())
@@ -128,7 +127,6 @@ namespace AutoInject.Mvc
         {
             var raw = ConfigurationManager.AppSettings[InjectDlls];
             return raw?.Split(SplitInjectDllsPattern).ToList() ?? new List<string>();
-
         }
     }
 }
