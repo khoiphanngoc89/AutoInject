@@ -26,12 +26,6 @@ namespace AutoInject.Core
         public void Initialize(IModuleRegister moduleRegister, TypeInfo type)
         {
             // Check assembly name include in register assembly names
-            if(regAssemblyNames?.Any() == true &&
-                regAssemblyNames?.Any(n => type.Assembly.FullName.Contains(n)) == false)
-            {
-                return;
-            }
-
             var (itype, serviceLifetime) = this.GetContactInfo(type);
             moduleRegister.Add(itype, type, serviceLifetime);
         }
@@ -51,7 +45,7 @@ namespace AutoInject.Core
         /// Registers name spaces
         /// </summary>
         /// <param name="assemblyNames">The assembly names.</param>
-        public void RegisterAssemblyNames(IEnumerable<string> assemblyNames)
+        public void RegisteredAssemblyNames(IEnumerable<string> assemblyNames)
         {
             this.regAssemblyNames = assemblyNames;
         }

@@ -14,7 +14,7 @@ namespace AutoInject.Core
         /// Registers name spaces
         /// </summary>
         /// <param name="assemblyNames">The assembly names.</param>
-        void RegisterAssemblyNames(IEnumerable<string> assemblyNames);
+        void RegisteredAssemblyNames(IEnumerable<string> assemblyNames);
 
         /// <summary>
         /// Initialize to get interface, implementation to register.

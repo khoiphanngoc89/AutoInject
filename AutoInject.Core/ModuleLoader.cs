@@ -25,27 +25,20 @@ namespace AutoInject.Core
         /// Load all included DLL to container.
         /// </summary>
         /// <param name="services">The service collection.</param>
-        /// <param name="registeredAssemblyNames">The registered assembly names.</param>
-        public static void LoadContainer(this IServiceCollection services, IEnumerable<string> registeredAssemblyNames)
+        /// <param name="externals">The registered assembly names.</param>
+        public static void LoadContainer(this IServiceCollection services, IEnumerable<string> externals)
         {
             try
             {
-                var registeredTypes = GetInjectedAssemblies(registeredAssemblyNames);
+                var registeredTypes = GetInjectedAssemblies(externals);
                 var executableLocation = Assembly.GetEntryAssembly().Location;
                 var assemblies = Directory
                            .GetFiles(Path.GetDirectoryName(executableLocation), SearchPattern, SearchOption.AllDirectories)
                            .Select(AssemblyLoadContext.Default.LoadFromAssemblyPath)
                            .ToList();
 
-                var targetAssemblies = assemblies.SelectMany(n => n.DefinedTypes).Where(m =>
-                {
-                    foreach (var registerType in registeredTypes)
-                    {
-                        return m.IsClass && m.FullName.StartsWith(registerType);
-                    }
-
-                    return false;
-                });
+                var targetAssemblies = assemblies.SelectMany(n => n.DefinedTypes)
+                                                 .Where(n => n.IsClass && registeredTypes.Any(m => n.FullName.Contains(m)));
 
                 var containerConfig = new ContainerConfiguration()
                     .WithAssemblies(assemblies);
@@ -53,7 +46,7 @@ namespace AutoInject.Core
                 using (var container = containerConfig.CreateContainer())
                 {
                     var module = container.GetExport<IModule>();
-                    module.RegisterAssemblyNames(registeredAssemblyNames);
+                    module.RegisteredAssemblyNames(registeredTypes);
                     var register = new ModuleRegister(services);
                     foreach (var targetAssembly in targetAssemblies)
                     {
@@ -66,7 +59,7 @@ namespace AutoInject.Core
                 var builder = new StringBuilder();
                 foreach (Exception loaderException in typeLoadException.LoaderExceptions)
                 {
-                    builder.AppendFormat("{0}\n", loaderException.Message);
+                    builder.Append(loaderException.Message);
                 }
 
                 throw new TypeLoadException(builder.ToString(), typeLoadException);
@@ -76,19 +69,18 @@ namespace AutoInject.Core
         /// <summary>
         /// Gets injected assemblies.
         /// </summary>
-        /// <param name="registeredAssemblyNames">The registered assembly names.</param>
+        /// <param name="externals">The registered assembly names.</param>
         /// <returns></returns>
-        private static IEnumerable<string> GetInjectedAssemblies(IEnumerable<string> registeredAssemblyNames)
+        private static IEnumerable<string> GetInjectedAssemblies(IEnumerable<string> externals)
         {
             StackTrace st = new StackTrace(1, true);
             var declaringType = st.GetFrame(1).GetMethod().DeclaringType;
             var name = declaringType.FullName.Split('.').FirstOrDefault();
-            var lst = new List<string>
+            return new List<string> (externals)
             {
                 name
             };
-            lst.AddRange(registeredAssemblyNames);
-            return lst;
+           
         }
     }
 }

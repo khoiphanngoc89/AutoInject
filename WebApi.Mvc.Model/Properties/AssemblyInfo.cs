@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AutoInject")]
+[assembly: AssemblyTitle("WebApi.Mvc.Model")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AutoInject")]
+[assembly: AssemblyProduct("WebApi.Mvc.Model")]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("3d410f72-6175-413c-8a39-1e914378fbf9")]
+[assembly: Guid("a5a10ab8-d9ba-4381-8a0c-9780fb208166")]
 
 // Version information for an assembly consists of the following four values:
 //
