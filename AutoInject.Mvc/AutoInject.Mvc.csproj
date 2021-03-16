@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="IModule.cs" />
     <Compile Include="IModuleRegister.cs" />
+    <Compile Include="InjectExportAttribute.cs" />
     <Compile Include="ModuleLoader.cs" />
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="ModuleRegister.cs" />

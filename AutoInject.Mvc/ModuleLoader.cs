@@ -12,8 +12,31 @@ namespace AutoInject.Mvc
 {
     public class ModuleLoader
     {
+        /// <summary>
+        /// The search pattern.
+        /// </summary>
+        private const string SearchPattern = "*.dll";
+
+        /// <summary>
+        /// The inject DLL.
+        /// </summary>
+        private const string InjectDlls = nameof(InjectDlls);
+
+        /// <summary>
+        /// The split pattern.
+        /// </summary>
+        private const char SplitPattern = '.';
+
+        /// <summary>
+        /// The split inject DLL pattern.
+        /// </summary>
+        private const char SplitInjectDllsPattern = ';';
+
         #region Unity Container
 
+        /// <summary>
+        /// 
+        /// </summary>
         private readonly static Lazy<IUnityContainer> container =
           new Lazy<IUnityContainer>(() =>
           {
@@ -42,10 +65,11 @@ namespace AutoInject.Mvc
         /// </remarks>
         public static void LoadContainer(IUnityContainer container)
         {
-            var directoryCategory = new DirectoryCatalog(AppDomain.CurrentDomain.RelativeSearchPath, "*.dll");
-            var registeredTypes = GetInjectedAssemblies(new List<string>());
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies().SelectMany(n => n.DefinedTypes.Where(m => m.IsClass && registeredTypes.Any(o => m.FullName.Contains(o))));
-            //var externals = ConfigurationManager.AppSettings[""];
+            var directoryCategory = new DirectoryCatalog(AppDomain.CurrentDomain.RelativeSearchPath, SearchPattern);
+            var registeredTypes = GetAssemblies();
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+                                      .SelectMany(n => n.DefinedTypes.Where(m => m.IsClass && registeredTypes.Any(o => m.FullName.Contains(o))));
+            //
             try
             {
                 using (var aggregateCatalog = new AggregateCatalog())
@@ -53,9 +77,13 @@ namespace AutoInject.Mvc
                     aggregateCatalog.Catalogs.Add(directoryCategory);
                     using (var compositionContainer = new CompositionContainer(aggregateCatalog))
                     {
-                        var exports = compositionContainer.GetExport<IModule>();
-                        var module = exports.Value;
+                        var export = compositionContainer.GetExport<IModule>();
+                        if(Equals(export, null))
+                        {
+                            throw new ReflectionTypeLoadException(new Type[] { }, new Exception[] { }, "Cannot load IModule.");
+                        }    
 
+                        var module = export.Value;
                         var register = new ModuleRegister(container);
                         foreach (var assembly in assemblies)
                         {
@@ -80,15 +108,26 @@ namespace AutoInject.Mvc
         /// </summary>
         /// <param name="externals">The registered assembly names.</param>
         /// <returns></returns>
-        private static IEnumerable<string> GetInjectedAssemblies(IEnumerable<string> externals)
+        private static IEnumerable<string> GetAssemblies()
         {
-            StackTrace st = new StackTrace(1, true);
+            var externals = GetRegisteredExternal();
+            var st = new StackTrace(1, true);
             var declaringType = st.GetFrame(6).GetMethod().DeclaringType;
-            var name = declaringType.FullName.Split('.').FirstOrDefault();
+            var name = declaringType.FullName.Split(SplitPattern).FirstOrDefault();
             return new List<string>(externals)
             {
                 name, 
             };
+        }
+
+        /// <summary>
+        /// Gets registered external DLL
+        /// </summary>
+        /// <returns></returns>
+        private static IEnumerable<string> GetRegisteredExternal()
+        {
+            var raw = ConfigurationManager.AppSettings[InjectDlls];
+            return raw.Split(SplitInjectDllsPattern);
 
         }
     }
