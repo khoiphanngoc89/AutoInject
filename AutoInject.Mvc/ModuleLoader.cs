@@ -127,7 +127,7 @@ namespace AutoInject.Mvc
         private static IEnumerable<string> GetRegisteredExternal()
         {
             var raw = ConfigurationManager.AppSettings[InjectDlls];
-            return raw.Split(SplitInjectDllsPattern);
+            return raw?.Split(SplitInjectDllsPattern).ToList() ?? new List<string>();
 
         }
     }
