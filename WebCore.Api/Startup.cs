@@ -29,7 +29,7 @@ namespace WebCore.Api
         {
 
             services.AddControllers();
-            services.LoadContainer(new List<string>());
+            services.LoadContainer(Configuration);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebCore.Api", Version = "v1" });

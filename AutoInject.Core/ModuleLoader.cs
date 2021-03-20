@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Composition.Hosting;
@@ -27,14 +28,20 @@ namespace AutoInject.Core
         private const char SplitPattern = '.';
 
         /// <summary>
+        /// 
+        /// </summary>
+        private const string ExNamespaces = nameof(ExNamespaces);
+
+        /// <summary>
         /// Load all included DLL to container.
         /// </summary>
         /// <param name="services">The service collection.</param>
         /// <param name="externals">The registered assembly names.</param>
-        public static void LoadContainer(this IServiceCollection services, IEnumerable<string> externals)
+        public static void LoadContainer(this IServiceCollection services, IConfiguration configuration)
         {
             try
             {
+                var externals = configuration.GetSection(ExNamespaces).AsEnumerable().Select(n => n.Value).Where(n => !Equals(n, null));
                 var registeredTypes = GetInjectedAssemblies(externals);
                 var executableLocation = Assembly.GetEntryAssembly().Location;
                 var assemblies = Directory

@@ -20,7 +20,7 @@ namespace AutoInject.Mvc
         /// <summary>
         /// The inject DLL.
         /// </summary>
-        private const string InjectDlls = nameof(InjectDlls);
+        private const string ExNamespaces = nameof(ExNamespaces);
 
         /// <summary>
         /// The split pattern.
@@ -125,7 +125,7 @@ namespace AutoInject.Mvc
         /// <returns></returns>
         private static IEnumerable<string> GetRegisteredExternal()
         {
-            var raw = ConfigurationManager.AppSettings[InjectDlls];
+            var raw = ConfigurationManager.AppSettings[ExNamespaces];
             return raw?.Split(SplitInjectDllsPattern).ToList() ?? new List<string>();
         }
     }
