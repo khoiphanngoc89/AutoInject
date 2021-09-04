@@ -45,8 +45,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoInject.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoInject.Mvc.1.0.0\lib\net452\AutoInject.Mvc.dll</HintPath>
+    <Reference Include="AutoInject.Mvc, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\WebMvc\packages\AutoInject.Mvc.1.0.0\lib\net452\AutoInject.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />

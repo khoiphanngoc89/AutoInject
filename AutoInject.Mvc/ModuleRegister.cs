@@ -32,7 +32,7 @@ namespace AutoInject.Mvc
         /// <param name="isSingleton">The is singleton.</param>
         public void Register(Type itype, Type type, bool isSingleton)
         {
-            if (Equals(itype, null) || itype.FullName.Contains(IModule))
+            if (Equals(itype, null) || string.IsNullOrWhiteSpace(itype.FullName) || itype.FullName.Contains(IModule))
             {
                 return;
             }

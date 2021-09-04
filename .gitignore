@@ -112,3 +112,4 @@ sonar-project.properties
 *.~ml
 *.~nt
 /Implementation/.vscode
+/WebMvc/.vs/WebMvc/config/*.config

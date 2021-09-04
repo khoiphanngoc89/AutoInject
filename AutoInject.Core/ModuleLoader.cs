@@ -50,7 +50,7 @@ namespace AutoInject.Core
                            .ToList();
 
                 var targetAssemblies = assemblies.SelectMany(n => n.DefinedTypes)
-                                                 .Where(n => n.IsClass && registeredTypes.Any(m => n.FullName.Contains(m)));
+                                                 .Where(n => registeredTypes.Any(m => n.FullName.Contains(m)));
 
                 var containerConfig = new ContainerConfiguration()
                     .WithAssemblies(assemblies);
