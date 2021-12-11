@@ -15,7 +15,7 @@ namespace AutoInject.Core
     /// <summary>
     /// The module loader
     /// </summary>
-    public static class ModuleLoader
+    public static class Extension
     {
         /// <summary>
         /// The search pattern.
@@ -37,7 +37,7 @@ namespace AutoInject.Core
         /// </summary>
         /// <param name="services">The service collection.</param>
         /// <param name="externals">The registered assembly names.</param>
-        public static void LoadContainer(this IServiceCollection services, IConfiguration configuration)
+        public static void AddAutoInjection(this IServiceCollection services, IConfiguration configuration)
         {
             try
             {
